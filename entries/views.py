@@ -8,7 +8,7 @@ class EntryListCreateView(generics.ListCreateAPIView):
     def get_queryset(self):
         return Entry.objects.filter(user=self.request.user)
     
-class EntryDetailView(generics.RetriveUpdateDestroyAPIView):
+class EntryDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = EntrySerializer
 
     def get_queryset(self):
