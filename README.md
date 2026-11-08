@@ -53,19 +53,25 @@ FLUSH PRIVILEGES;
 
 5. Set your database credentials in ```config/settings.py``` (or via environment variables).
 
-6. Run migrations:
+6. Copy `.env.example` to `.env` and fill in your values:
+
+```bash
+cp .env.example .env
+```
+
+7. Run migrations:
 
 ```bash
 python manage.py migrate
 ```
 
-7. Create a superuser:
+8. Create a superuser:
 
 ```bash
 python manage.py createsuperuser
 ```
 
-8. Run the server:
+9. Run the server:
 
 ```bash
 python manage.py runserver
