@@ -1,6 +1,6 @@
 # Mood Journal API
 
-A private diry REST API that analyzes the mood of each entry and exposes per-user statistics.
+A private diary REST API that analyzes the mood of each entry and exposes per-user statistics.
 
 ## Features
 
@@ -9,7 +9,7 @@ A private diry REST API that analyzes the mood of each entry and exposes per-use
 - Server-side mood scoring from free-text entries
 - Per-user statistics: total entries, average mood, and sentiment breakdown
 - Strict per-user data isolation: users can only ever access their own entries
-- Unit tests for the analyzer and integration for the API
+- Unit tests for the analyzer and integration tests for the API
 
 ## Tech Stack
 
@@ -17,7 +17,7 @@ A private diry REST API that analyzes the mood of each entry and exposes per-use
 - Django
 - Django REST Framework
 - MariaDB
-- openpyxl (used by the lexicon build script to read the PerSent Exel file)
+- openpyxl (used by the lexicon build script to read the PerSent Excel file)
 - django-filter
 
 ## Setup
@@ -26,10 +26,10 @@ A private diry REST API that analyzes the mood of each entry and exposes per-use
 
 ```bash
 git clone https://github.com/Roozbeh-web/mood-journal-api.git
-cd mood-journal
+cd mood-journal-api
 ```
 
-2. Create and activate a virtual enviroment:
+2. Create and activate a virtual environment:
 
 ```bash
 python3 -m venv venv
@@ -47,11 +47,11 @@ pip install -r requirements.txt
 ```sql
 CREATE DATABASE moodjournal CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 CREATE USER 'mooduser'@'localhost' IDENTIFIED BY 'your-password';
-GRANT ALL PRIVILAGES ON moodjournal.* TO 'mooduser'@'localhost';
+GRANT ALL PRIVILEGES ON moodjournal.* TO 'mooduser'@'localhost';
 FLUSH PRIVILEGES;
 ```
 
-5. Set your database credentials in ```config/settings.py``` (or via enviroment variables).
+5. Set your database credentials in ```config/settings.py``` (or via environment variables).
 
 6. Run migrations:
 
@@ -147,7 +147,7 @@ Response:
 
 ## How Mood Scoring Works
 
-Each entry's text is tokenized with a Unicode-aware regular expression that recognizes both latin and Persian/Arabic word characters. However, only Persian words are scored: the merged sentiment lexicon contains Persian entries from PerSent and the curated colloquial list, with no English words. Latin-script tokens are recognized as tokens but will not match the lexicon, so they contribute nothing to the score.
+Each entry's text is tokenized with a Unicode-aware regular expression that recognizes both Latin and Persian/Arabic word characters. However, only Persian words are scored: the merged sentiment lexicon contains Persian entries from PerSent and the curated colloquial list, with no English words. Latin-script tokens are recognized as tokens but will not match the lexicon, so they contribute nothing to the score.
 
 - **PerSent** — a published Persian sentiment lexicon, filtered to words with a polarity score of at least 0.3 (positive) or at most -0.3 (negative).
 
@@ -159,7 +159,7 @@ The score is computed as:
 (positive_count - negative_count) / (positive_count + negative_count)
 ```
 
-This produce a value in `[-1.0, 1.0]`, where `0.0` means neutral or no recognized sentiment words. The score is always computed server-side and cannot be set by client.
+This produce a value in `[-1.0, 1.0]`, where `0.0` means neutral or no recognized sentiment words. The score is always computed server-side and cannot be set by the client.
 
 The merged lexicon is stored in `entries/data/lexicon.json`. It is generated from PerSent by `scripts/build_lexicon.py` using `openpyxl` to read the Excel source file.
 
@@ -177,11 +177,11 @@ The test suite covers:
 
 ## Acknowledgments
 
-This project users the **PerSent** Persian sentiment lexicon, developed by the authors of th PerSent paper. PerSent is distributed free for non-comercial academic use and is **not** redistributed in this repository. To regenerate the lexicon file from scratch, download PerSent from its official source and run `python scripts/build_lixicon.py`.
+This project uses the **PerSent** Persian sentiment lexicon, developed by the authors of the PerSent paper. PerSent is distributed free for non-commercial academic use and is **not** redistributed in this repository. To regenerate the lexicon file from scratch, download PerSent from its official source and run `python scripts/build_lexicon.py`.
 
 - PerSent: http://www.gelbukh.com/resources/persent/
 
-# Author
+## Author
 
 Roozbeh
 https://github.com/Roozbeh-web
