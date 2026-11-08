@@ -82,3 +82,40 @@ class EntryAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         entry.refresh_from_db()
         self.assertLess(entry.mood_score, 0)
+
+class EntryStatsAPITests(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='ali', password='pass12345')
+        self.token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.token.key}')
+
+    def test_stats_requires_auth(self):
+        self.client.credentials()
+        response = self.client.get('/api/entries/stats/')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_stats_empty(self):
+        response = self.client.get('/api/entries/stats/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['total_entries'], 0)
+        self .assertIsNone(response.data['average_mood'])
+
+    def test_stats_count_by_sentiment(self):
+        Entry.objects.create(user=self.user, text='a', mood_score=0.8)
+        Entry.objects.create(user=self.user, text='b', mood_score=0.5)
+        Entry.objects.create(user=self.user, text='c', mood_score=-0.7)
+        Entry.objects.create(user=self.user, text='d', mood_score=0.0)
+
+        response = self.client.get('/api/entries/stats/')
+        self.assertEqual(response.data['total_entries'], 4)
+        self.assertEqual(response.data['positive_entries'], 2)
+        self.assertEqual(response.data['negative_entries'], 1)
+        self.assertEqual(response.data['neutral_entries'], 1)
+
+    def test_stats_only_include_own_entries(self):
+        other = User.objects.create_user(username='mamad', password='pass12345')
+        Entry.objects.create(user=self.user, text='mine', mood_score=0.5)
+        Entry.objects.create(user=other, text='theirs', mood_score=0.9)
+
+        response = self.client.get('/api/entries/stats/')
+        self.assertEqual(response.data['total_entries'], 1)
