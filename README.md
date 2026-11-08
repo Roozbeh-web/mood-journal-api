@@ -108,7 +108,8 @@ Response:
 
 Create an entry:
 
-```POST /api/entries/
+```
+POST /api/entries/
 Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b
 Content-Type: application/json
 
