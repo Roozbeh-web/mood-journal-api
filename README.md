@@ -177,7 +177,7 @@ The test suite covers:
 
 ## Acknowledgments
 
-This project users the **PerSent** Persian sentiment lexicon, developed by the authors of th PerSent paper. PerSent is distributed free for non-comercial academic use and is **not** redistributed in this repository. To regenerate the lexicon file from scratch, download PerSent from its official source and run `python scripts/build_lixiconpy`.
+This project users the **PerSent** Persian sentiment lexicon, developed by the authors of th PerSent paper. PerSent is distributed free for non-comercial academic use and is **not** redistributed in this repository. To regenerate the lexicon file from scratch, download PerSent from its official source and run `python scripts/build_lixicon.py`.
 
 - PerSent: http://www.gelbukh.com/resources/persent/
 
