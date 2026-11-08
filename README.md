@@ -5,7 +5,7 @@ A private diary REST API that analyzes the mood of each entry and exposes per-us
 ## Features
 
 - Token-based authentication (one token per user)
-- Create, list, retrieve, update and delete diary entries
+- Create, list, retrieve, update, and delete diary entries
 - Server-side mood scoring from free-text entries
 - Per-user statistics: total entries, average mood, and sentiment breakdown
 - Strict per-user data isolation: users can only ever access their own entries
@@ -83,7 +83,7 @@ python manage.py runserver
 | DELETE | `/api/entries/<id>/` | Delete an entry |
 | GET | `/api/entries/stats/` | Per-user aggregate statistics |
 
-All endpoints expect `/api/auth/token/` require the header:
+All endpoints except `/api/auth/token/` require the header:
 
 ```
 Authorization: Token <your-token>
@@ -160,7 +160,7 @@ The score is computed as:
 (positive_count - negative_count) / (positive_count + negative_count)
 ```
 
-This produce a value in `[-1.0, 1.0]`, where `0.0` means neutral or no recognized sentiment words. The score is always computed server-side and cannot be set by the client.
+This produces a value in `[-1.0, 1.0]`, where `0.0` means neutral or no recognized sentiment words. The score is always computed server-side and cannot be set by the client.
 
 The merged lexicon is stored in `entries/data/lexicon.json`. It is generated from PerSent by `scripts/build_lexicon.py` using `openpyxl` to read the Excel source file.
 
@@ -173,7 +173,7 @@ python manage.py test entries
 The test suite covers:
 
 - Mood analyzer behavior (7 tests): positive, negative, neutral, empty, mixed, case-insensitivity, score bounds
-- API behavior (8 tests): authentication, entry creation, server-side scoring, ownership enforcement, per-user isolation on read, update and delete.
+- API behavior (8 tests): authentication, entry creation, server-side scoring, ownership enforcement, per-user isolation on read, update and delete
 - Statistics endpoint (4 tests): authentication, empty state, sentiment bucketing, per-user isolation
 
 ## Acknowledgments
